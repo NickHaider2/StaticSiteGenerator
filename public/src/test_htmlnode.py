@@ -1,6 +1,5 @@
 import unittest
-from htmlnode import HTMLNode
-from htmlnode import LeafNode
+from htmlnode import HTMLNode, LeafNode, ParentNode
 
 class TestHTMLNode(unittest.TestCase):
     def test_eq(self):
@@ -42,6 +41,32 @@ class TestHTMLNode(unittest.TestCase):
         self.assertEqual(leaf_node.to_html(), '<a href="https://www.weathernetwork.com">Click Me!</a>' )
 
     
+    def test_parent_no_children(self):
+        parent_node = ParentNode("p", None, {"text-align": "left"})
+        with self.assertRaises(ValueError):
+            parent_node.to_html()
+
+    def test_parent_multiple_children(self):
+        parent_node = ParentNode("p", [
+                    LeafNode("b", "Bold text"),
+                    LeafNode(None, "Normal text"),
+                    LeafNode("i", "italic text"),
+                    LeafNode(None, "Normal text"),
+                    ], {"text-align": "left"})
+        self.assertEqual(parent_node.to_html(),
+                         '<p text-align="left"><b>Bold text</b>Normal text<i>italic text</i>Normal text</p>')
+    
+    def test_parent_with_grandchildren(self):
+        parent_node = ParentNode("h1", [
+                    LeafNode("b", "Bold text"),
+                    LeafNode(None, "Normal text"),
+                    LeafNode("i", "italic text"),
+                    ParentNode("h2", [
+                        LeafNode("b", "Bold text"),
+                        LeafNode(None, "Normal text")]),
+                    ])
+        self.assertEqual(parent_node.to_html(), "<h1><b>Bold text</b>Normal text<i>italic text</i><h2><b>Bold text</b>Normal text</h2></h1>")
+        
     
 if __name__ == "__main__":
     unittest.main()

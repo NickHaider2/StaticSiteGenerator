@@ -22,12 +22,12 @@ class HTMLNode:
     
 
 class LeafNode(HTMLNode):
-    def __init__(self, tag, value, children, props):
+    def __init__(self, tag, value, children=None, props=None):
         super().__init__(tag, value, None, props)
 
     def to_html(self):
         if not self.value:
-            raise ValueError("Value is required for LeafNode.")
+            raise ValueError("Invalid HTML: LeafNode must have a value.")
         
         if not self.tag:
             return str(self.value)
@@ -36,6 +36,24 @@ class LeafNode(HTMLNode):
         
     def __repr__(self):
         return f"LeafNode (tag: {self.tag}, value: {self.value}, props: {self.props})"
+    
+class ParentNode(HTMLNode):
+    def __init__(self, tag, children, props=None):
+        super().__init__(tag, None, children, props)
+
+    def to_html(self):
+
+        if not self.tag:
+            raise ValueError("Invalid HTML: ParetNode must have a tag.")
+
+        if not self.children:
+             raise ValueError("Invalid HTML: ParentNode must have a list of children.")
+        
+        return f"<{str(self.tag)}{self.props_to_html()}>{''.join([child.to_html() for child in self.children])}</{str(self.tag)}>"
+
+
+    def __repr__(self):
+        return f"ParentNode (tag: {self.tag}, value: {self.value}, children: {self.children}, props: {self.props})"
             
 
 def main():
@@ -44,6 +62,30 @@ def main():
 
     leaf_node = LeafNode("p", "This is a paragraph", [], {"class": "exciting-paragraph"})
     print(leaf_node.to_html())
+
+    children1 = [
+                    LeafNode("b", "Bold text"),
+                    LeafNode(None, "Normal text"),
+                    LeafNode("i", "italic text"),
+                    LeafNode(None, "Normal text"),
+                    ]
+
+    parent_node = ParentNode(
+                            "p",
+                            children1,
+                        )
+    print(parent_node.to_html())
+
+    parent_node2 = ParentNode("h1", [
+                    LeafNode("b", "Bold text"),
+                    LeafNode(None, "Normal text"),
+                    LeafNode("i", "italic text"),
+                    ParentNode("h2", [
+                        LeafNode("b", "Bold text"),
+                        LeafNode(None, "Normal text")]),
+                    ])
+    print(parent_node2.to_html())
+    
 
 if __name__ == "__main__":
     main()
