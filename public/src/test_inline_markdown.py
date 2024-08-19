@@ -4,7 +4,7 @@ from inline_markdown import (
     split_nodes_delimiter,
     split_nodes_image,
     split_nodes_link,
-    text_to_textnodes,
+    convert_text_to_textnodes,
     extract_markdown_links,
     extract_markdown_images,
 )
@@ -197,7 +197,7 @@ class TestInlineMarkdown(unittest.TestCase):
 
     def test_text_to_text_nodes(self):
         test_text = "This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
-        to_text_nodes = text_to_textnodes(test_text)
+        to_text_nodes = convert_text_to_textnodes(test_text)
         self.assertListEqual(to_text_nodes,
                              [
                                  TextNode("This is ", TextType.TEXT),
@@ -213,6 +213,15 @@ class TestInlineMarkdown(unittest.TestCase):
                                  TextNode("link", TextType.LINK,
                                           "https://boot.dev"),
                              ])
+        
+
+    test_case = """# This is a heading
+
+This is a paragraph of text. It has some **bold** and *italic* words inside of it.
+
+* This is the first list item in a list block
+* This is a list item
+* This is another list item"""
 
 
 if __name__ == "__main__":

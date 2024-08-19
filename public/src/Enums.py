@@ -13,5 +13,5 @@ class BlockType(Enum):
     HEADING = "heading"
     CODE = "code"
     QUOTE = "quote"
-    UL_LIST = "unordered_list"
+    U_LIST = "unordered_list"
     O_LIST = "ordered_list"

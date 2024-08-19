@@ -8,8 +8,8 @@ class TextNode:
         if not isinstance(text_type, TextType):
             raise TypeError("Invalid Text Type")
         
-        if url and not uri_validator(url):
-            raise ValueError("URL is invalid!")
+        # if url and not uri_validator(url):
+        #     raise ValueError("URL is invalid!")
 
         self.text = text
         self.text_type = text_type
@@ -29,7 +29,7 @@ def uri_validator(url):
     except AttributeError:
         return False
     
-def text_node_to_html_node(text_node):
+def convert_text_node_to_html_node(text_node):
 
     if not isinstance(text_node.text_type, TextType):
             raise TypeError("Invalid Text Type")
@@ -46,14 +46,14 @@ def text_node_to_html_node(text_node):
         case TextType.LINK:
             return LeafNode("a", text_node.text, None, {"href": text_node.url})
         case TextType.IMAGE:
-            return LeafNode("img", "", None, props={"src": text_node.url, "alt": text_node.text})
+            return LeafNode("img", text_node.text, None, props={"src": text_node.url, "alt": text_node.text})
         
 
 def main():
     textNodeExample = TextNode("Example TextNode",  TextType.ITALIC, "https://www.theweathernetwork.com")
     print(textNodeExample)
 
-    print(text_node_to_html_node(textNodeExample))
+    print(convert_text_node_to_html_node(textNodeExample))
 
 if __name__ == "__main__":
     main()

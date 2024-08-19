@@ -143,7 +143,7 @@ def split_nodes_image(old_nodes):
     return new_nodes
 
 
-def text_to_textnodes(text):
+def convert_text_to_textnodes(text):
     old_nodes = [TextNode(text, TextType.TEXT)]
     bold_processed_text = split_nodes_delimiter(old_nodes, "**", TextType.BOLD)
     italic_processed_text = split_nodes_delimiter(bold_processed_text, "*", TextType.ITALIC)
@@ -183,7 +183,7 @@ def main():
     print(split_nodes_image([node_with_images]))
 
     test_text = "This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
-    print(text_to_textnodes(test_text))
+    print(convert_text_to_textnodes(test_text))
 
 
 if __name__ == "__main__":
